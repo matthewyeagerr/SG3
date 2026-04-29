@@ -1,6 +1,47 @@
+"""
+╔═════════════════════════════════════════════════════════════════════════════════════════════╗
+║ SG3                                                                   					  ║
+╠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╣
+║ Language: Python 3.13.12                                               					  ║
+║ IDE: Thonny, Pycharm, (IF ANYONE USES SOMETHIHNG DIFFERENT, ADD HERE)                       ║
+║ Class: CS 4500 - Intro to the Software Profession                 						  ║
+║ Program: SG3 - Paint Blobs                                        						  ║
+║ Authors:                                                            						  ║
+║  - Zane Buchanan     []                                             						  ║
+║  - Tressa Millering  [dtmhg6]                                        						  ║
+║  - Tori St. John     []                                              						  ║
+║  - Matthew Yeager    []                              			                			  ║
+║  - Jacob Young       []                                        				    		  ║
+╠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╣
+║ Program Description																		  ║
+╠---------------------------------------------------------------------------------------------╣
+║	                                                                                          ║
+╠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╣
+║ Major Dates        																		  ║
+║   - 04/21/2026 (Repository created)														  ║
+║	- 04/28/2026 (Basic GUI implemented)            									      ║
+║	- 04/29/2026 (Basic simulation implemented)        									      ║
+║                                                    						                  ║
+╟─────────────────────────────────────────────────────────────────────────────────────────────╢
+║ Packages Used        																		  ║
+║	- random																		          ║
+║	- tkinter																		          ║
+║	- time  																		          ║
+║                                  							          						  ║
+╠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╣
+║ Outside Sources																			  ║
+║           								                                                  ║
+╚═════════════════════════════════════════════════════════════════════════════════════════════╝
+"""
 import tkinter as tk
 import random
+import time
 
+
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# Globals  (ADD DOCUMENTATION)
 root = None
 canvas = None
 statsBox = None
@@ -9,6 +50,15 @@ graphCanvas = None
 
 rectangles = []
 cellSize = 25
+
+color_opts = ["red", "green", "blue"]
+console_color_opts = ["\033[30m", "\033[31m", "\033[32m", "\033[34m"]
+
+#Defining types for readability
+type Grid = list[list[int]]
+type Coord = tuple[int, int]
+
+
 
 # -function prototypes ---
 
@@ -29,6 +79,135 @@ cellSize = 25
 # runBatchOptionOne(N, MaxT, increment)
 # runBatchOptionTwo(N, MaxT, increment)
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+ANIMATE IN CONSOLE
+FOR TESTING PURPOSES
+WILL NOT ANIMATE CORRECTLY IF TKINTER WINDOW IS OPEN
+
+\033[0m - resets color 
+\033[H  - moves cursor to 1,1
+"""
+def console_animate(colors:Grid, N:int):
+    reset = "\033[0m"
+    print("\033[H", end="", flush=True)
+    for i in range(N):
+        print("[", end="")
+        for j in range(N):
+            color = console_color_opts[colors[i][j]]
+            print(f"{color}●{reset} ", end="")
+        print("\b]")
+    print()
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+FOR TESTING
+Just prints a 2D array in multiple lines. Can give it a label too
+"""
+def print_array(array, length, label=""):
+    print(label + (":" if (label != "") else ""))
+    for _ in range(0, length):
+        print(array[_])
+    print("\n")
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+ADD DESCRIPTION
+runs simulation, obviously. ill add a better description later
+Will remove debug and gui before submission. 
+This function declaration is disgustingly long lmao
+
+	:param N         |   (int) ---> grid size
+    :param T         |   (int) ---> ticks per sim 
+    :param animate   |   (bool) --> animate sim or not, false by default
+    :param anim_time |   (float) -> animation length
+    :param debug     |   (bool) --> outputs data to console for testing. false by default
+    :param gui       |   (bool) --> if gui is open (true), animates it. false by default  
+
+	:return: tuple[Grid (top layer of colors),
+	               Grid (# of blobs dropped on each square),
+	               Grid (tracks squares that have only one color)]
+"""
+def run_simulation(N:int, T:int, animate:bool = False, anim_time:float = 0, debug:bool = False, gui:bool = False)->tuple[Grid, Grid, Grid]:
+
+    anim_step:float = (anim_time / T) * 0.8                #sleep time between animation updates
+    filled:bool = False                                    #has the grid been filled
+    colors:Grid = [[0] * N for _ in range(N)]              #Track current top layer of colors. 0 none, 1 red, 2 green, 3 blue
+    blob_counts:Grid = [[0] * N for _ in range(N)]         #Track how many blobs dropped on each square
+    monocolor_squares:Grid = [[1] * N for _ in range(N)]   #Track if a square has more than on color dropped
+
+    start = 0
+    if (debug):
+        start = time.perf_counter()
+
+    for tick in range(T):
+        new_color, loc = drop_blob(N)
+        if colors[loc[0]][loc[1]] not in (new_color, 0):
+            monocolor_squares[loc[0]][loc[1]] = 0
+
+        colors[loc[0]][loc[1]] = new_color
+        blob_counts[loc[0]][loc[1]] += 1
+
+        if animate:
+            if gui:
+                colorSquare(new_color, loc)
+            time.sleep(anim_step)
+
+            # TESTING, for use when not in TKinter window
+            if (debug):
+                console_animate(colors, N)
+            # TESTING
+
+
+        # this is definitely inefficient, will find better solution later
+        if 0 not in blob_counts and tick != T and not filled:
+            #Call whatever the output stats function is
+            filled = True
+
+    #squares that haven't been dropped on aren't monocolor
+    for i in range(N):
+        for j in range(N):
+            if colors[i][j] == 0:
+                monocolor_squares[i][j] = 0
+
+    if (debug):
+        end = time.perf_counter()
+        print("TIME:", format(end-start, '.2f'), "seconds" "\n")
+        print_array(colors, N, "COLORS")
+        print_array(monocolor_squares, N, "MONOCOLOR SQUARES")
+        total = 0
+        for row in blob_counts:
+            for val in row:
+                total += val
+        print("TOTAL BLOB COUNT: ", total, "\nEXPECTED: ", T)
+        print_array(blob_counts, N, "BLOB COUNT")
+
+    return colors, blob_counts, monocolor_squares
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+ADD DOCUMENTATION
+"""
+def drop_blob(N:int)->tuple[int, Coord]:
+    new_color:int = random.randint(1, 3)
+    loc:Coord = (random.randint(0, N - 1), random.randint(0, N - 1))
+    return new_color, loc
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def buildWindow():
     global root, canvas, statsBox, statusLabel, graphCanvas
 
@@ -89,7 +268,11 @@ def buildWindow():
     graphCanvas = tk.Canvas(graphFrame, width=450, height=350, bg="white")
     graphCanvas.pack(padx=10, pady=10)
 
-def drawGrid(N):
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+def drawGrid(N:int):
     """Draw an N by N grid on the canvas."""
     global rectangles, cellSize
 
@@ -122,25 +305,38 @@ def drawGrid(N):
 
     root.update()
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-def colorSquare(color, row, col):
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+#Tressa made a few changes to integrate w her code
+def colorSquare(color:int, loc:Coord):
     """Update one square on the canvas to the given color."""
-    canvas.itemconfig(rectangles[row][col], fill=color)
+    canvas.itemconfig(rectangles[loc[0]][loc[1]], fill=color_opts[color-1])
     root.update_idletasks()
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def updateStatus(message):
     """Display a message under the canvas."""
     statusLabel.config(text=message)
     root.update_idletasks()
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def updateProgress(current, total):
     """Display simulation progress while the program runs."""
     percent = round((current / total) * 100, 1)
     updateStatus("Progress: " + str(current) + "/" + str(total) + " drops (" + str(percent) + "%)")
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def showFinalCanvas(data):
     """
     Display the final grid using the top color in each square.
@@ -156,7 +352,10 @@ def showFinalCanvas(data):
             color = data[row][col]["topColor"]
             colorSquare(color, row, col)
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def formatStats(stats):
     """Format the simulation statistics into readable text."""
     text = ""
@@ -170,18 +369,27 @@ def formatStats(stats):
     text += "Squares with only one color: " + str(stats["oneColorSquares"]) + "\n"
     return text
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def printResults(stats):
     """Print formatted statistics in the stats box."""
     statsBox.insert(tk.END, formatStats(stats) + "\n")
     statsBox.see(tk.END)
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def clearStats():
     """Clear the stats box."""
     statsBox.delete("1.0", tk.END)
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def plotGraph(results):
     """
     Display a simple graph of lowest, average, and highest blob counts.
@@ -229,13 +437,22 @@ def plotGraph(results):
     graphCanvas.create_text(475, 75, text="square = average")
     graphCanvas.create_text(475, 95, text="triangle = highest")
 
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+
+
+
+#━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def main():
     # person 1 flow
     # build window
     # run first
     # run second
     #run choice
+    #
+
+    colors, blob_counts, monocolor_squares = run_simulation(10, 500, True, 0, debug=True)
+
     pass
 
 if __name__ == "__main__":
