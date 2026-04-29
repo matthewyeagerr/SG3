@@ -10,6 +10,25 @@ graphCanvas = None
 rectangles = []
 cellSize = 25
 
+# -function prototypes ---
+
+# Person 3
+# makeGridData(N)
+# dropBlob(data)
+# runSim(N, MaxT)
+# computeStats(data, blobsDropped)
+# checkAllSquaresPainted(data)
+
+# Person 2
+# getValidN()
+# getValidMaxT()
+# getValidIncrement()
+# getMenuChoice()
+
+# Person 5
+# runBatchOptionOne(N, MaxT, increment)
+# runBatchOptionTwo(N, MaxT, increment)
+
 def buildWindow():
     global root, canvas, statsBox, statusLabel, graphCanvas
 
@@ -210,4 +229,15 @@ def plotGraph(results):
     graphCanvas.create_text(475, 75, text="square = average")
     graphCanvas.create_text(475, 95, text="triangle = highest")
 
+
+def main():
+    # person 1 flow
+    # build window
+    # run first
+    # run second
+    #run choice
+    pass
+
+if __name__ == "__main__":
+    main()
 
