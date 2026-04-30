@@ -55,8 +55,8 @@ color_opts = ["red", "green", "blue"]
 console_color_opts = ["\033[30m", "\033[31m", "\033[32m", "\033[34m"]
 
 #Defining types for readability
-type Grid = list[list[int]]
-type Coord = tuple[int, int]
+Grid = list[list[int]]
+Coord = tuple[int, int]
 
 
 
@@ -158,7 +158,7 @@ def run_simulation(N:int, T:int, animate:bool = False, anim_time:float = 0, debu
 
         if animate:
             if gui:
-                colorSquare(new_color, loc)
+                colorSquare(new_color, loc[0],loc[1])
             time.sleep(anim_step)
             if debug:
                 console_animate(colors, N)
@@ -305,10 +305,9 @@ def drawGrid(N:int):
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#Tressa made a few changes to integrate w her code
-def colorSquare(color:int, loc:Coord):
+def colorSquare(color, row, col):
     """Update one square on the canvas to the given color."""
-    canvas.itemconfig(rectangles[loc[0]][loc[1]], fill=color_opts[color-1])
+    canvas.itemconfig(rectangles[row][col], fill=color_opts[color-1])
     root.update_idletasks()
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -445,8 +444,6 @@ def main():
     # run first
     # run second
     #run choice
-    #
-
     colors, blob_counts, monocolor_squares = run_simulation(10, 500, True, 0, debug=True)
 
     pass
