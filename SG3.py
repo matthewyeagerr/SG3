@@ -30,13 +30,15 @@
 ║                                  							          						  ║
 ╠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╣
 ║ Outside Sources																			  ║
-║           								                                                  ║
+║     - https://stackoverflow.com/questions/42250235/border-colours-of-canvases-tkinter       ║
+║           Used to add border to paint canvas                                                ║
 ╚═════════════════════════════════════════════════════════════════════════════════════════════╝
 """
+
 import random
 import time
 import tkinter as tk
-from tkinter.constants import ALL
+
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # Globals  (ADD DOCUMENTATION)
@@ -136,7 +138,7 @@ This function declaration is disgustingly long lmao
 """
 def run_simulation(N:int, T:int, animate:bool = False, anim_time:float = 0, debug:bool = False, gui:bool = False)->tuple[Grid, Grid, Grid]:
 
-    anim_step:float = (anim_time / T)                  #sleep time between animation updates
+    anim_step:float = (anim_time / T)                      #sleep time between animation updates
     filled:bool = False                                    #has the grid been filled
     colors:Grid = [[0] * N for _ in range(N)]              #Track current top layer of colors. 0 none, 1 red, 2 green, 3 blue
     blob_counts:Grid = [[0] * N for _ in range(N)]         #Track how many blobs dropped on each square
