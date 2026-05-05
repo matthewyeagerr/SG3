@@ -49,7 +49,8 @@ statusLabel = None
 graphCanvas = None
 
 rectangles = []
-cellSize = 25
+#Think this can be removed; its immediately overwritten the one time its used
+#cellSize = 25
 
 color_opts = ["red", "green", "blue"]
 console_color_opts = ["\033[30m", "\033[31m", "\033[32m", "\033[34m"]
@@ -149,6 +150,7 @@ def run_simulation(N:int, T:int, animate:bool = False, anim_time:float = 0, debu
         start = time.perf_counter()
 
     for tick in range(T):
+        updateProgress(tick, T)
         new_color, loc = drop_blob(N)
         if colors[loc[0]][loc[1]] not in (new_color, 0):
             monocolor_squares[loc[0]][loc[1]] = 0
@@ -163,7 +165,6 @@ def run_simulation(N:int, T:int, animate:bool = False, anim_time:float = 0, debu
             #if debug:
                 #console_animate(colors, N)
 
-        # this is definitely inefficient, will find better solution later
         if 0 not in blob_counts and tick != T and not filled:
             #Call whatever the output stats function will be
             filled = True
@@ -401,8 +402,18 @@ def updateStatus(message):
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def updateProgress(current, total):
     """Display simulation progress while the program runs."""
-    percent = round((current / total) * 100, 1)
-    updateStatus("Progress: " + str(current) + "/" + str(total) + " drops (" + str(percent) + "%)")
+    bar_length: int = 30
+    progress: float = current / (total-1)
+    filled: int = int(progress * bar_length)
+    empty: int = bar_length - filled
+
+    bar: str = "█" * filled + "░" * empty
+    percent: float = progress * 100
+
+    updateStatus(f"{bar}  ---  {percent:.2f}%")
+
+  #  percent = round((current / total) * 100, 1)
+  #  updateStatus("Progress: " + str(current) + "/" + str(total) + " drops (" + str(percent) + "%)")
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -530,8 +541,7 @@ def main():
     #     colorSquare(3, 0, i)
     #     colorSquare(3, N-1, i)
 
-    colors, blob_counts, monocolor_squares = run_simulation(N, 5000, True, 0, gui=True,debug=True)
-    updateStatus("Finished!")
+    colors, blob_counts, monocolor_squares = run_simulation(N, 10000, True, 0, gui=True,debug=True)
     root.mainloop()
     pass
 
