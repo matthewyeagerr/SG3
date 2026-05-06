@@ -541,7 +541,7 @@ Update one square on the canvas to the given color.
     :param col     |  (int) --> column of square to color
     
 """
-def colorSquare(color, row:int, col:int):
+def colorSquare(color:int, row:int, col:int):
     canvas.itemconfig(rectangles[row][col], fill=color_opts[color-1])
     root.update_idletasks()
 
@@ -686,7 +686,7 @@ def plotGraph(results):
     if len(results) == 0:
         return
 
-    graphCanvas.create_text(300, 15, text="Batch Simulation Results")
+    graphCanvas.create_text(250, 15, text="Batch Simulation Results")
 
     graphCanvas.create_line(50, 250, 420, 250)
     graphCanvas.create_line(50, 40, 50, 250)
@@ -726,10 +726,15 @@ def plotGraph(results):
         prevLow = (x, lowY)
         prevAvg = (x, avgY)
         prevHigh = (x, highY)
+        # axis labels
+    graphCanvas.create_text(235, 290, text="Simulation Input")
+    graphCanvas.create_text(15, 145, text="Blob Count", angle=90)
 
     graphCanvas.create_text(440, 55, text="circle = lowest")
     graphCanvas.create_text(440, 75, text="square = average")
     graphCanvas.create_text(440, 95, text="triangle = highest")
+
+
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
