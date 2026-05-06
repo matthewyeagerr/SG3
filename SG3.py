@@ -22,13 +22,12 @@
 ║	- 04/28/2026 (Basic GUI implemented)            									      ║
 ║	- 04/29/2026 (Basic simulation implemented)        									      ║
 ║   - 05/05/2026 (First draft of program complete)     						                  ║
-║                                                    						                  ║
+║   - 05/06/2026 (Bug fixing pass and minor changes complete, program finished)               ║
 ╟─────────────────────────────────────────────────────────────────────────────────────────────╢
 ║ Packages Used        																		  ║
 ║	- random																		          ║
 ║	- tkinter																		          ║
 ║	- time  																		          ║
-║                                  							          						  ║
 ╠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╣
 ║ Outside Sources																			  ║
 ║     - https://stackoverflow.com/questions/42250235/border-colours-of-canvases-tkinter       ║
@@ -47,10 +46,10 @@ root = None # main Tkinter window
 canvas = None # grid drawing canvas
 statsBox = None # box for statistics
 statusLabel = None # progress/status display label
-graphCanvas = None #cavnas to draw graphs
-rectangles = []
+graphCanvas = None #canvas to draw graphs
+rectangles = [] #grid of squares on the canvas
 
-color_opts = ["red", "green", "blue"]
+color_opts = ["red", "green", "blue"] #color options
 
 #Defining types for readability
 Grid = list[list[int]]
@@ -107,7 +106,7 @@ Calls getValidInt with values for grabbing N.
 
 	:return: int (call to getValidInt)
 """
-def getValidN():
+def getValidN()->int:
     return getValidInt(
         "Grid Size",
         "Enter grid size N (2 to 100):",
@@ -124,7 +123,7 @@ Calls getValidInt with values for grabbing MaxT.
 
 	:return: int (call to getValidInt)
 """
-def getValidMaxT():
+def getValidMaxT()->int:
     return getValidInt(
         "Maximum Time / Blobs",
         "Enter MaxT, the number of seconds/blobs to simulate (4 to 1,000,000):",
@@ -319,7 +318,8 @@ def getBlobStats(blob_counts:Grid, N:int)->tuple[int, float, int]:
 """
 makeStats()
 builds a statistics dictionary for simulation results
-tracks blobs dropped, lowest/avg/highest blob counts, total blobs per color, number of one color squares
+tracks blobs dropped, lowest/avg/highest blob counts, 
+total blobs per color, number of monocolor squares
 
     :param blob_counts        | (Grid) --------> 2D list of blob counts per square
     :param monocolor_squares  | (Grid) --------> 2D list of monocolor_squares
@@ -493,9 +493,8 @@ Draw an N by N grid on the canvas.
 Uses globals rectangles
 
     :param N   |  (int) --> grid size, stays constant
-
+    
 """
-# Draws NxN rectangle on canvas based on N parameter
 def drawGrid(N:int):
 
     global rectangles
@@ -566,9 +565,8 @@ def updateStatus(message):
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
-updateStatus()
-Display a message under the canvas.
-Display simulation progress while the program runs.
+updateProgress()
+Display loading bar while the program runs.
 
     :param current   |  (int) --> current blob out of total
     :param total     |  (int) --> total blobs that will be dropped
@@ -590,13 +588,15 @@ def updateProgress(current:int, total:int):
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+showFinalCanvas()
+Display the final grid using the top color in each square.
+    
+    :param data   |  (Grid) --> final canvas
+    
+"""
 def showFinalCanvas(data:Grid):
-    """
-    Display the final grid using the top color in each square.
 
-    Expected data format:
-    data[row][col]["topColor"]
-    """
     N = len(data)
     drawGrid(N)
 
@@ -610,8 +610,15 @@ def showFinalCanvas(data:Grid):
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-def formatStats(stats):
-    """Format the simulation statistics into readable text."""
+"""
+formatStats()
+Format the simulation statistics into readable text.
+
+    :param stats  |  (dict[str, int | float]) --> final canvas
+
+    :return: str (formatted stats)
+"""
+def formatStats(stats:dict[str, int | float])->str:
     text = ""
     text += "Blobs dropped: " + str(stats["blobsDropped"]) + "\n"
     text += "Lowest blobs on a square: " + str(stats["lowest"]) + "\n"
@@ -627,6 +634,13 @@ def formatStats(stats):
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+printResults()
+Format the simulation statistics into readable text.
+
+    :param stats  |  (str) --> stats from formatStats
+
+"""
 def printResults(stats):
     """Print formatted statistics in the stats box."""
     statsBox.insert(tk.END, formatStats(stats) + "\n")
@@ -636,21 +650,30 @@ def printResults(stats):
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+clearStats()
+Empties the stats box
+"""
 def clearStats():
-    """Clear the stats box."""
     statsBox.delete("1.0", tk.END)
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# Plot each simulation result as:
-# circle = lowest blob count
-# square = average blob count
-# triangle = highest blob count
+
+"""
+plotGraph()
+Display a simple graph of lowest, average, and highest blob counts.
+Plot each simulation result as:
+Circle = lowest blob count
+Square = average blob count
+Triangle = highest blob count
+
+    :param results  |  (dic[str, int | float]) --> stats from makeStats
+"""
 def plotGraph(results):
     """
-    Display a simple graph of lowest, average, and highest blob counts.
 
     Expected results format:
     [
@@ -715,7 +738,7 @@ def plotGraph(results):
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
-program flow:
+Program flow:
 run 10x10 simulation
 run user selected simulation
 display grid
@@ -756,6 +779,9 @@ def main():
 
     # EXPERIMENT OPTIONS
     choice = getMenuChoice()
+
+    drawGrid(2)  #clear the canvas
+
 
     if choice == 1:
         N = getValidN()
