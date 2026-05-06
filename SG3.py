@@ -269,6 +269,8 @@ def run_simulation(N:int, T:int, animate:bool = False, anim_time:float = 0, show
             if show_stats:
                 stats = makeStats(blob_counts, monocolor_squares, tick + 1, N, colorTotals)
                 printResults(stats)
+                messagebox.showinfo("Canvas Filled!", "The canvas has been filled for the first time! Stats are above. Press ok to continue.")
+                clearStats()
             filled = True
 
     #squares that haven't been dropped on aren't monocolor
@@ -276,7 +278,7 @@ def run_simulation(N:int, T:int, animate:bool = False, anim_time:float = 0, show
         for j in range(N):
             if colors[i][j] == 0:
                 monocolor_squares[i][j] = 0
-        
+
     if show_stats:
         stats = makeStats(blob_counts, monocolor_squares, tick + 1, N, colorTotals)
         printResults(stats)
@@ -426,7 +428,7 @@ def runBatchOptionTwo(N:int, MaxT:int, increment:int):
         results.append({"x": currentMaxT, "lowest": low, "average": avg, "highest": high})
         
         updateProgress(i + 1, 10)  # show user something is happening
-    
+
     plotGraph(results, False)
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -494,7 +496,7 @@ def buildWindow():
     graphLabel = tk.Label(graphFrame, text="Graph", font=("Arial", 12, "bold"))
     graphLabel.pack()
 
-    graphCanvas = tk.Canvas(graphFrame, width=500, height=400, bg="white", highlightthickness=1, highlightbackground="black")
+    graphCanvas = tk.Canvas(graphFrame, width=510, height=400, bg="white", highlightthickness=1, highlightbackground="black")
     graphCanvas.pack(padx=10, pady=10)
 
     fig = Figure(figsize=(5, 4), dpi=100)
@@ -693,6 +695,7 @@ Triangle = highest blob count
     :param batch_one |                    (bool) --> is a graph for batch one
 """
 def plotGraph(results, batch_one:bool):
+    updateStatus("Loading graph...")
 
     if len(results) == 0:
         return
@@ -769,6 +772,7 @@ def main():
     choice = getMenuChoice()
 
     drawGrid(2)  #clear the canvas
+    clearStats() #clear stats box
 
     if choice == 1:
         N = getValidN()
