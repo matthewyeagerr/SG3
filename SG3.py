@@ -737,7 +737,8 @@ def main():
         firstN,
         firstMaxT,
         animate=True,
-        anim_time=10
+        anim_time=10,
+        gui=True
     )
 
     # SECOND USER-CONTROLLED SIMULATION
@@ -749,8 +750,10 @@ def main():
     colors, blob_counts, monocolor_squares = run_simulation(
         N,
         MaxT,
-        animate=anim
-)
+        animate=anim,
+        debug=True,
+        gui=True
+    )
 
     showFinalCanvas(colors)
 
