@@ -542,7 +542,7 @@ Update one square on the canvas to the given color.
     :param col     |  (int) --> column of square to color
     
 """
-def colorSquare(color:int, row:int, col:int):
+def colorSquare(color, row:int, col:int):
     canvas.itemconfig(rectangles[row][col], fill=color_opts[color-1])
     root.update_idletasks()
 
@@ -590,7 +590,7 @@ def updateProgress(current:int, total:int):
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-def showFinalCanvas(data):
+def showFinalCanvas(data:Grid):
     """
     Display the final grid using the top color in each square.
 
@@ -738,7 +738,6 @@ def main():
         firstMaxT,
         animate=True,
         anim_time=10,
-        gui=True
     )
 
     # SECOND USER-CONTROLLED SIMULATION
@@ -751,8 +750,6 @@ def main():
         N,
         MaxT,
         animate=anim,
-        debug=True,
-        gui=True
     )
 
     showFinalCanvas(colors)
