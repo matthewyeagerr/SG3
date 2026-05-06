@@ -725,7 +725,6 @@ def main():
         firstMaxT,
         animate=True,
         anim_time=10,
-        gui=True
     )
 
     # SECOND USER-CONTROLLED SIMULATION
@@ -738,8 +737,6 @@ def main():
         N,
         MaxT,
         animate=anim,
-        debug=True,
-        gui=True
     )
 
     showFinalCanvas(colors)
