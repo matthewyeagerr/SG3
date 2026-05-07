@@ -600,9 +600,11 @@ def updateProgress(current:int, total:int):
     empty: int = bar_length - filled
 
     bar: str = "█" * filled + "░" * empty
-    percent: float = progress * 100
+    percent: float= progress * 100
 
     updateStatus(f"{bar}  ---  {percent:.2f}%")
+
+
 
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -695,6 +697,8 @@ Triangle = highest blob count
     :param batch_one |                    (bool) --> is a graph for batch one
 """
 def plotGraph(results, batch_one:bool):
+    #clear bar
+    updateStatus("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t")
     updateStatus("Loading graph...")
 
     if len(results) == 0:
@@ -722,6 +726,7 @@ def plotGraph(results, batch_one:bool):
 
     # Embed the figure in the Tkinter canvas
     chart.draw()
+    updateStatus("Graph complete!")
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -751,7 +756,7 @@ def main():
         firstN,
         firstMaxT,
         animate=True,
-        anim_time=10,
+        anim_time=0,
     )
 
     # SECOND USER-CONTROLLED SIMULATION
