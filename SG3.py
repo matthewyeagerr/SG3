@@ -643,14 +643,10 @@ Format the simulation statistics into readable text.
 """
 def formatStats(stats:dict[str, int | float])->str:
     text = ""
-    text += "Blobs dropped: " + str(stats["blobsDropped"]) + "\n"
-    text += "Lowest blobs on a square: " + str(stats["lowest"]) + "\n"
-    text += "Highest blobs on a square: " + str(stats["highest"]) + "\n"
-    text += "Average blobs per square: " + str(round(stats["average"], 2)) + "\n"
-    text += "Red blobs: " + str(stats["red"]) + "\n"
-    text += "Green blobs: " + str(stats["green"]) + "\n"
-    text += "Blue blobs: " + str(stats["blue"]) + "\n"
-    text += "Squares with only one color: " + str(stats["oneColorSquares"]) + "\n"
+    text += "Blobs dropped: " + str(stats["blobsDropped"]) + "\t\t\t\t\tAverage blobs per square: " + str(round(stats["average"], 2)) + "\n"
+    text += "Lowest blobs on a square: " + str(stats["lowest"]) + "\t\t\t\t\tRed blobs: " + str(stats["red"]) + "\n"
+    text += "Highest blobs on a square: " + str(stats["highest"]) + "\t\t\t\t\tGreen blobs: " + str(stats["green"]) + "\n"
+    text += "Squares with only one color: " + str(stats["oneColorSquares"]) + "\t\t\t\t\tBlue blobs: " + str(stats["blue"])
     return text
 
 #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -666,6 +662,7 @@ Format the simulation statistics into readable text.
 """
 def printResults(stats):
     """Print formatted statistics in the stats box."""
+    clearStats()
     statsBox.insert(tk.END, formatStats(stats) + "\n")
     statsBox.see(tk.END)
 
