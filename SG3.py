@@ -59,10 +59,10 @@
 ║   - 05/06/2026 (Bug fixing pass and minor changes complete, program finished)               ║
 ╟─────────────────────────────────────────────────────────────────────────────────────────────╢
 ║ Packages Used        																		  ║
-║	- random																		          ║
-║	- tkinter																		          ║
-║	- time  																		          ║
-║	- matplotlib																	          ║
+║	- random: used to generate random paint blob colors and grid locations					  ║
+║	- tkinter: used to create GUI including windows, canvas, pop-ups, buttons, and displays   ║
+║	- time: used to control animation timing and pausing during simulations                   ║
+║	- matplotlib: used to create and display graphs										      ║
 ╠━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╣
 ║ Outside Sources																			  ║
 ║     - https://stackoverflow.com/questions/42250235/border-colours-of-canvases-tkinter       ║
